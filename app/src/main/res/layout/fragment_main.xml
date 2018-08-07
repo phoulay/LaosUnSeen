@@ -5,6 +5,7 @@
 
     <!--Content-->
     <LinearLayout
+        android:layout_margin="@dimen/margin"
         android:background="@drawable/bg_login"
         android:orientation="vertical"
         android:layout_width="match_parent"

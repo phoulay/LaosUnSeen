@@ -44,7 +44,7 @@
             <!--User-->
             <EditText
                 android:id="@+id/edtEmail"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:hint="Email :"
                 android:background="@drawable/textfield_email"
                 android:layout_width="match_parent"

@@ -33,6 +33,8 @@
 
             <!--Name-->
             <EditText
+
+                android:id="@+id/edtName"
                 android:inputType="text"
                 android:hint="Name :"
                 android:background="@drawable/textfield_name"
@@ -41,16 +43,18 @@
 
             <!--User-->
             <EditText
+                android:id="@+id/edtEmail"
                 android:inputType="text"
-                android:hint="Name :"
+                android:hint="Email :"
                 android:background="@drawable/textfield_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <!--Password-->
             <EditText
+                android:id="@+id/editPassword"
                 android:inputType="text"
-                android:hint="Name :"
+                android:hint="Password :"
                 android:background="@drawable/textfield_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

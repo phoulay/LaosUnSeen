@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
@@ -29,9 +40,12 @@ public class RegisterFragment extends Fragment {
     private Uri uri;
     private ImageView imageView;
     private boolean aBoolean = true;
+    private String nameString, emailString, passwordString,
+    uidString, pathURLString, myPostString;
 
 
     @Override
+
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -69,26 +83,91 @@ public class RegisterFragment extends Fragment {
         EditText passwordEditText = getView().findViewById(R.id.editPassword);
 
 //        Get value From  EditText
-        String nameString = nameEditText.getText().toString().trim();
-        String emailString = emailEditText.getText().toString().trim();
-        String passwordString = passwordEditText.getText().toString().trim();
+        nameString = nameEditText.getText().toString().trim();
+        emailString = emailEditText.getText().toString().trim();
+        passwordString = passwordEditText.getText().toString().trim();
 
 //        Check Choose Photo
         if (aBoolean) {
 //            Non Choose Photo
             MyAlert myAlert = new MyAlert(getActivity());
             myAlert.normalDialog("Non Choose Photo ", "Please Choose Photo");
-        } else if (nameString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty() ) {
+        } else if (nameString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty()) {
 
 //            Have space
             MyAlert myAlert = new MyAlert(getActivity());
             myAlert.normalDialog("Have Space",
-                                    "Please FIll All Every Blank");
+                    "Please FIll All Every Blank");
 
 
         } else {
+
+//       No spce
+
+            createAuthentication();
+
+            uploadPhotoTofilebase();
+
+
         }
 
+
+    }
+
+    private void createAuthentication() {
+
+//        Log.d("8AugV1", "CreateAuthen work");
+
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(emailString, passwordString)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            uidString = firebaseAuth.getCurrentUser().getUid();
+                            Log.d("8AugV1", "uidString ==>" + uidString);
+                           // Log.wtf("8AvgV1", "uidString ==>" + uidString);
+
+//                            Log.d("8AugV1", "Successful");
+
+                        } else {
+
+                            MyAlert myAlert = new MyAlert(getActivity());
+                            myAlert.normalDialog("Cannot Register",
+                                    "Because ==>" + task.getException().getMessage());
+//                            Log.d("8AugV1", "Error ==>"+ task.getException().getMessage());
+
+                        }
+                    }
+                });
+
+    }
+
+    private void uploadPhotoTofilebase() {
+
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference();
+        StorageReference storageReference1 = storageReference.child("Avatar/" + nameString);
+
+        storageReference1.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getActivity(), "Success Upload Photo", Toast.LENGTH_SHORT).show();
+                findPathUrlPhoto();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Cannot Upload Photo", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }// uploadPhoto
+
+    private void findPathUrlPhoto() {
 
     }
 

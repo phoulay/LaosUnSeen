@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "66044922534",
+    "firebase_url": "https://laosunseen-1896e.firebaseio.com",
+    "project_id": "laosunseen-1896e",
+    "storage_bucket": "laosunseen-1896e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66044922534:android:9e9d1d625dcea639",
+        "android_client_info": {
+          "package_name": "masterung.androidthai.in.th.laosunseen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66044922534-1qniue70c21e93j7lr4cqf57b3vjrpko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "masterung.androidthai.in.th.laosunseen",
+            "certificate_hash": "54ee1fe3b13c1784e88fd8e8b113ad9a24e57fc1"
+          }
+        },
+        {
+          "client_id": "66044922534-jm0179db2nlhefiq8ftiqlkdjdi6oil6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmG1XSZ-dmAkpUUdFDJXzK3lm5xSAAUD8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66044922534-jm0179db2nlhefiq8ftiqlkdjdi6oil6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

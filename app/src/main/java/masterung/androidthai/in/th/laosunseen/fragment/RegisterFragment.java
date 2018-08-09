@@ -1,5 +1,6 @@
 package masterung.androidthai.in.th.laosunseen.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,13 +27,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
 import masterung.androidthai.in.th.laosunseen.utility.MyAlert;
+import masterung.androidthai.in.th.laosunseen.utility.UserModel;
 
 public class RegisterFragment extends Fragment {
 
@@ -42,6 +48,7 @@ public class RegisterFragment extends Fragment {
     private boolean aBoolean = true;
     private String nameString, emailString, passwordString,
     uidString, pathURLString, myPostString;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -77,6 +84,11 @@ public class RegisterFragment extends Fragment {
     }
 
     private void uploadProcess() {
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Upload Value Process");
+        progressDialog.setMessage("Please Wait few Minu...");
+        progressDialog.show();
 
         EditText nameEditText = getView().findViewById(R.id.edtName);
         EditText emailEditText = getView().findViewById(R.id.edtEmail);
@@ -137,7 +149,7 @@ public class RegisterFragment extends Fragment {
                             myAlert.normalDialog("Cannot Register",
                                     "Because ==>" + task.getException().getMessage());
 //                            Log.d("8AugV1", "Error ==>"+ task.getException().getMessage());
-
+                                progressDialog.dismiss();
                         }
                     }
                 });
@@ -155,19 +167,86 @@ public class RegisterFragment extends Fragment {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(getActivity(), "Success Upload Photo", Toast.LENGTH_SHORT).show();
                 findPathUrlPhoto();
+                createPost();
+                createDatabase();
+                progressDialog.dismiss();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getActivity(), "Cannot Upload Photo", Toast.LENGTH_SHORT).show();
+                Log.d("8AvgV1", "e ==>" + e.toString());
+                progressDialog.dismiss();
             }
         });
 
 
     }// uploadPhoto
 
+    private void createDatabase() {
+
+        UserModel userModel = new UserModel(uidString, nameString, emailString, pathURLString,
+                        myPostString);
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference()
+                .child("User");
+        databaseReference.child(uidString).setValue(userModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "Register Success ", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.contentMainFragment, new Servicefragment())
+                                .commit();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("9AvgV1", "e CreateDatabase ==>" + e.toString());
+            }
+        });
+
+    }//createDatabase
+
+    private void createPost() {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        stringArrayList.add("Hello");
+        myPostString = stringArrayList.toString();
+        Log.d("9AvgV1", "myPost ==>" + myPostString);
+
+
+
+
+    }
+
     private void findPathUrlPhoto() {
+
+        try {
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            StorageReference storageReference = firebaseStorage.getReference();
+            final String[] urlStrings = new String[1];
+
+            storageReference.child("Avatar").child(nameString)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            urlStrings[0] = uri.toString();
+                            pathURLString = urlStrings[0];
+                            Log.d("9AvgV1", "pathURL ==>" + pathURLString);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("9AvgV1", "e Error ==> " + e.toString());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -26,43 +26,45 @@ public class Servicefragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
 
 //        Create Toolbar
-        createToolbar();
+      //  createToolbar();
 
 
-
+//    Add Fragment
 
 
     }//Main Method
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_service, menu);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.menu_service, menu);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+   // @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        if (item.getItemId() == R.id.itemSignout) {
+//            signOut();
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-        if (item.getItemId() == R.id.itemSignout) {
-            signOut();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    private  void  signOut(){
+//        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+//        firebaseAuth.signOut();
+//        getActivity().finish();
+//
+//
+//    }
 
-    private  void  signOut(){
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-        getActivity().finish();
+//    private void createToolbar() {
+//        Toolbar toolbar = getView().findViewById(R.id.toolbarservice);
+//        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+//        setHasOptionsMenu(true);
+//    }
 
 
-    }
-
-    private void createToolbar() {
-        Toolbar toolbar = getView().findViewById(R.id.toolbarservice);
-        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
-    }
 
     @Nullable
     @Override
